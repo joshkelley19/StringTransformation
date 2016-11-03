@@ -5,9 +5,9 @@ public class Main {
     public static Map<Integer, String> map = new LinkedHashMap<>();
     static final String[] onesTeens = {"One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"};
     static final String[] tens = {"Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"};
-    static final String[] denominations = {"Hundred","Thousand","Million","Billion"};
+    static final String[] denominations = {"Hundred","Thousand","Million","Billion",""};
     public static void main(String[] args) {
-        System.out.println(stringTransformation("1"));
+        System.out.println(stringTransformation("123456789"));
     }
 
     public static String stringTransformation(String s){
@@ -18,39 +18,38 @@ public class Main {
         fillMap();
         if(number>999999){
             ind = (number-(number%1000000))/1000000;
-            sb.append(build(String.format("%03d",ind),denominations[2]));
-            System.out.println(String.format("%03d",ind));
+            sb.append(build(ind,2));
         }
         if(number>999){
             ind = ((number%1000000)-(number%1000))/1000;
-            sb.append(build(String.format("%03d",ind),denominations[1]));
-            System.out.println(String.format("%03d",ind));
+            sb.append(build(ind,1));
 
         }
         if(number>0){
             ind = number%1000;
-            sb.append(build(String.format("%03d",ind),""));
-            System.out.println(String.format("%03d",ind));
+            sb.append(build(ind,4));
         }
         sb.append("Dollars");
         return sb.toString();
     }
 
-    static String build(String num,String dem){
+    static String build(int number,int dem){
+        String num = String.format("%03d",number);
+        System.out.println(num);
         StringBuilder sb = new StringBuilder();
         int h, t, o;
         h = Integer.parseInt(num.substring(0,1));
         t = Integer.parseInt(num.substring(1,2));
         o = Integer.parseInt(num.substring(2,3));
         if(h!=0)sb.append(map.get(h)).append(denominations[0]);
-        if(t!=0&&t!=1){
-            sb.append(map.get(t*10));
-        }else{
-            sb.append(map.get(Integer.parseInt(num.substring(1,3)))).append(dem);
-            return sb.toString();
+        if(t!=0){
+            if(t==0){
+                sb.append(map.get(Integer.parseInt(num.substring(1,3)))).append(dem);
+                return sb.toString();
+            }else{sb.append(map.get(t*10));}
         }
         if(o!=0)sb.append(map.get(o));
-        sb.append(dem);
+        sb.append(denominations[dem]);
         return sb.toString();
     }
 
